@@ -1,0 +1,220 @@
+/* ==================================
+   GLOBAL RESET + FONT
+================================== */
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: "Times New Roman", Times, serif;
+    background: #f5f7fb;
+    padding: 32px;
+    color: #111111;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ==================================
+   CONTAINER & GRID
+================================== */
+.container {
+    max-width: 1280px;
+    margin: auto;
+}
+
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 36px;
+}
+
+/* ==================================
+   HEADER
+================================== */
+header {
+    background: linear-gradient(135deg, #6b5cff, #8a63f6); /* OLD COLOR BACK */
+    padding: 20px 28px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* ==================================
+   SECTION TITLES (REVERT COLOR)
+================================== */
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 22px;
+    color: #111827; /* dark professional */
+}
+
+/* ==================================
+   CARD BASE STYLE
+================================== */
+.kpi-card,
+.chart-card,
+.input-section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.08),
+        0 3px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ==================================
+   KPI CARDS
+================================== */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 28px;
+}
+
+.kpi-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.kpi-value {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 6px 0;
+    color: #000000;
+}
+
+.kpi-status {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.kpi-status.declining {
+    color: #dc2626;
+}
+
+.kpi-status.improving {
+    color: #16a34a;
+}
+
+/* ==================================
+   CHART CARDS (SPACING FIX)
+================================== */
+.chart-card {
+    margin-top: 26px;   /* 🔥 spacing added */
+    margin-bottom: 30px;
+}
+
+.chart-title {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #111827; /* OLD STYLE COLOR */
+}
+
+/* Line chart size */
+.chart-wrapper {
+    height: 300px;
+}
+
+/* ==================================
+   CUSTOMER SEGMENTS CARD (SIZE BALANCE)
+================================== */
+.segment-wrapper {
+    max-width: 340px;
+    margin: 10px auto 0 auto; /* spacing below title */
+}
+
+/* ==================================
+   CUSTOMER INPUT CARD
+================================== */
+.input-section {
+    padding: 26px;
+    height: fit-content;
+}
+
+/* Customer Input heading – color revert */
+.input-section .section-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #111827; /* SAME AS OTHERS */
+}
+
+/* Vertical layout */
+.input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    padding: 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: none;
+    background: #f1f1f1;
+    color: #000000;
+}
+
+.form-field input::placeholder {
+    color: #9ca3af;
+}
+
+/* Button */
+.predict-button {
+    margin-top: 10px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #1495ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(20, 149, 255, 0.35);
+}
+
+.predict-button:hover {
+    background: #0f7ad6;
+}
+
+/* ==================================
+   RESULT CARD
+================================== */
+.prediction-result {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.hidden {
+    display: none;
+}
