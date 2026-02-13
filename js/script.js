@@ -5,11 +5,12 @@ let segmentChartInstance = null;
 document.addEventListener("DOMContentLoaded", () => {
 
     /* ===============================
-       LOAD CSV DATA
+       LOAD CSV DATASET
     =============================== */
     fetch("data/customer_churn.csv")
-        .then(response => response.text())
+        .then(res => res.text())
         .then(csv => {
+
             const rows = csv.trim().split("\n").slice(1);
 
             rows.forEach(row => {
@@ -27,19 +28,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
-            console.log("CSV Loaded:", customers.length);
+            console.log("Dataset Loaded:", customers.length);
 
             updateKPIs(customers);
             renderLineChart(customers);
             renderSegmentChart(customers);
-        })
-        .catch(err => console.error("CSV Load Error:", err));
+        });
+
+
+    /* ===============================
+       AUTO FILL FROM CUSTOMER ID
+    =============================== */
+    document.getElementById("customerId").addEventListener("change", function () {
+
+        const enteredId = this.value;
+
+        const customer = customers.find(c => c.id == enteredId);
+
+        if (!customer) {
+            alert("Customer Not Found in Dataset");
+            return;
+        }
+
+        document.getElementById("tenure").value = customer.tenure;
+        document.getElementById("monthlyCharges").value = customer.monthlyCharges;
+        document.getElementById("contractType").value = customer.contract;
+    });
 
 
     /* ===============================
        KPI UPDATE
     =============================== */
     function updateKPIs(data) {
+
         const total = data.length;
 
         const churned = data.filter(
@@ -56,13 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* ===============================
-       LINE CHART (JAN–DEC)
+       LINE CHART
     =============================== */
     function renderLineChart(data) {
 
-        if (trendsChartInstance) {
-            trendsChartInstance.destroy();
-        }
+        if (trendsChartInstance) trendsChartInstance.destroy();
 
         const buckets = {
             Jan: [], Feb: [], Mar: [], Apr: [], May: [], Jun: [],
@@ -70,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         data.forEach(c => {
+
             if (c.tenure <= 5) buckets.Jan.push(c);
             else if (c.tenure <= 10) buckets.Feb.push(c);
             else if (c.tenure <= 15) buckets.Mar.push(c);
@@ -84,8 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
             else buckets.Dec.push(c);
         });
 
-        const churnData = [];
-        const retentionData = [];
+        let churnData = [];
+        let retentionData = [];
 
         Object.values(buckets).forEach(group => {
 
@@ -95,14 +115,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const churned = group.filter(
+            let churned = group.filter(
                 c => c.churn.trim().toLowerCase() === "yes"
             ).length;
 
-            const churnRate = (churned / group.length) * 100;
+            let rate = (churned / group.length) * 100;
 
-            churnData.push(Number(churnRate.toFixed(1)));
-            retentionData.push(Number((100 - churnRate).toFixed(1)));
+            churnData.push(rate.toFixed(1));
+            retentionData.push((100 - rate).toFixed(1));
         });
 
         trendsChartInstance = new Chart(document.getElementById("trendsChart"), {
@@ -114,50 +134,50 @@ document.addEventListener("DOMContentLoaded", () => {
                         label: "Churn %",
                         data: churnData,
                         borderColor: "#ef4444",
-                        backgroundColor: "transparent",
                         tension: 0.4
                     },
                     {
                         label: "Retention %",
                         data: retentionData,
                         borderColor: "#8b5cf6",
-                        backgroundColor: "transparent",
                         tension: 0.4
                     }
                 ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
             }
         });
     }
 
 
     /* ===============================
-       CUSTOMER SEGMENT CHART
+       PIE CHART
     =============================== */
     function renderSegmentChart(data) {
 
-        if (segmentChartInstance) {
-            segmentChartInstance.destroy();
-        }
+        if (segmentChartInstance) segmentChartInstance.destroy();
 
-        let loyal = 0, atRisk = 0, newly = 0, highValue = 0;
+        let loyal=0, atRisk=0, newly=0, highValue=0;
 
         data.forEach(c => {
-            if (c.churn.trim().toLowerCase() === "yes") atRisk++;
-            else if (c.tenure <= 6) newly++;
-            else if (c.monthlyCharges >= 70) highValue++;
-            else if (c.tenure >= 24) loyal++;
+
+            if(c.churn.trim().toLowerCase() === "yes")
+                atRisk++;
+
+            else if(c.tenure <= 6)
+                newly++;
+
+            else if(c.monthlyCharges >= 70)
+                highValue++;
+
+            else if(c.tenure >= 24)
+                loyal++;
         });
 
         segmentChartInstance = new Chart(document.getElementById("segmentChart"), {
             type: "doughnut",
             data: {
-                labels: ["Loyal", "At Risk", "New", "High Value"],
+                labels: ["Loyal","At Risk","New","High Value"],
                 datasets: [{
-                    data: [loyal, atRisk, newly, highValue],
+                    data: [loyal,atRisk,newly,highValue],
                     backgroundColor: [
                         "#ef4444",
                         "#10b981",
@@ -165,68 +185,60 @@ document.addEventListener("DOMContentLoaded", () => {
                         "#6366f1"
                     ]
                 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: "bottom" }
-                }
             }
         });
     }
 
 
     /* ===============================
-       CONNECT TO FLASK BACKEND
+       ML MODEL PREDICTION
     =============================== */
-    document.querySelector(".predict-button").addEventListener("click", function (e) {
+    document.querySelector(".predict-button").addEventListener("click", async function () {
 
-        e.preventDefault();
-
-        const tenure = document.querySelector("#tenure").value;
-        const monthlyCharges = document.querySelector("#monthlyCharges").value;
-        const contract = document.querySelector("#contractType").value;
+        const tenure = document.getElementById("tenure").value;
+        const monthlyCharges = document.getElementById("monthlyCharges").value;
+        const contract = document.getElementById("contractType").value;
 
         if (!tenure || !monthlyCharges) {
-            alert("Please fill all required fields");
+            alert("Enter Customer ID First!");
             return;
         }
 
-        fetch("http://127.0.0.1:5000/predict", {
+        const response = await fetch("http://127.0.0.1:5000/predict", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 tenure: tenure,
                 monthlyCharges: monthlyCharges,
                 contract: contract
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-
-            if (data.error) {
-                alert("Backend Error: " + data.error);
-                return;
-            }
-
-            const resultBox = document.getElementById("predictionResult");
-            const resultContent = document.getElementById("resultContent");
-
-            resultContent.innerHTML = `
-                <strong>Prediction:</strong> ${data.prediction} <br>
-                <strong>Churn Probability:</strong> ${data.churn_probability}
-            `;
-
-            resultBox.classList.remove("hidden");
-        })
-        .catch(error => {
-            console.error("Connection Error:", error);
-            alert("Cannot connect to backend. Make sure Flask is running.");
         });
 
+        const data = await response.json();
+
+        if(data.error){
+            alert(data.error);
+            return;
+        }
+
+        let riskMsg="";
+
+        if(data.churn_probability>=0.6)
+            riskMsg="🔴 High Risk - Offer 20% Discount";
+
+        else if(data.churn_probability>=0.4)
+            riskMsg="🟡 Medium Risk - Retention Offer Needed";
+
+        else
+            riskMsg="🟢 Loyal Customer";
+
+        document.getElementById("predictionResult").style.display="block";
+
+        document.getElementById("resultContent").innerHTML=`
+        <b>Prediction:</b> ${data.prediction}<br>
+        <b>Churn Probability:</b> ${data.churn_probability}<br><br>
+        <b>${riskMsg}</b>
+        `;
     });
 
 });

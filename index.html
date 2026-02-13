@@ -63,37 +63,42 @@
                 <h2 class="section-title">Customer Input</h2>
 
                 <form id="customerForm" class="input-form">
+
                     <div class="form-field">
                         <label>Customer ID</label>
-                        <input type="text" placeholder="Enter ID">
+                        <input type="text" id="customerId" placeholder="Enter ID">
                     </div>
 
                     <div class="form-field">
                         <label>Tenure (Months)</label>
-                        <input type="number" placeholder="0">
+                        <input type="number" id="tenure" placeholder="0">
                     </div>
 
                     <div class="form-field">
                         <label>Monthly Charges</label>
-                        <input type="number" placeholder="$0">
+                        <input type="number" id="monthlyCharges" placeholder="$0">
                     </div>
 
+                    <!-- ✅ FIXED CONTRACT VALUES -->
                     <div class="form-field">
                         <label>Contract Type</label>
-                        <select>
-                            <option>Month-to-Month</option>
-                            <option>One Year</option>
-                            <option>Two Year</option>
+                        <select id="contractType">
+                            <option value="Month-to-month">Month-to-month</option>
+                            <option value="One year">One year</option>
+                            <option value="Two year">Two year</option>
                         </select>
                     </div>
 
-                    <button type="button" class="predict-button">Predict Churn</button>
+                    <button type="button" class="predict-button">
+                        Predict Churn
+                    </button>
                 </form>
 
-                <div id="predictionResult" class="prediction-result hidden">
+                <div id="predictionResult" class="prediction-result" style="display:none;">
                     <h3>Prediction Result</h3>
                     <div id="resultContent"></div>
                 </div>
+
             </div>
 
         </div>
@@ -102,5 +107,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./js/script.js"></script>
+
 </body>
 </html>
