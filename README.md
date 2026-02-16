@@ -1,12 +1,17 @@
-# Customer Segmentation & Retention Analysis Dashboard
+# 📊 Customer Segmentation & Retention Analysis Dashboard
+
+---
 
 ## 📌 Project Overview
 Customer churn is a major challenge for subscription-based and digital businesses.
 Retaining existing customers is significantly more cost-effective than acquiring new ones.
 
 This project focuses on analyzing customer behavior, segmenting customers into meaningful
-groups, and predicting customer churn using data science and machine learning techniques.
-Insights are visualized through an interactive dashboard inspired by a professional SaaS-style UI.
+groups, predicting customer churn using machine learning, and recommending retention
+actions through an AI-powered dashboard.
+
+The system integrates a trained ML model with an interactive frontend to enable
+real-time churn prediction for individual customers.
 
 ---
 
@@ -15,11 +20,12 @@ Insights are visualized through an interactive dashboard inspired by a professio
 - Businesses struggle to identify customers at high risk of churn
 - Retention strategies are often generic instead of data-driven
 
-**Proposed Solution:**  
-A data-driven churn analysis system that:
+### 💡 Proposed Solution:
+A data-driven churn analysis and retention system that:
 - Identifies customers likely to churn
 - Segments customers based on behavior and value
-- Supports proactive and targeted retention strategies
+- Predicts churn probability using ML models
+- Suggests proactive retention actions
 
 ---
 
@@ -27,7 +33,7 @@ A data-driven churn analysis system that:
 - Analyze customer usage and behavioral patterns
 - Segment customers into meaningful business groups
 - Predict customer churn using machine learning models
-- Visualize KPIs and insights using a dashboard
+- Provide real-time churn prediction via dashboard
 - Enable data-backed retention decision-making
 
 ---
@@ -48,66 +54,58 @@ A data-driven churn analysis system that:
 
 ---
 
-## 📈 Success Metrics
-- **Churn Rate Accuracy**
-- **Recall (Churn Class)** – Ability to identify customers likely to churn
-- **Precision–Recall Balance** – Actionable predictions with minimal false positives
+## 🛠️ System Architecture
 
----
-
-## 🛠️ Approach Overview
-1. Data collection and exploratory data analysis (EDA)
-2. Data cleaning and preprocessing
-3. Feature selection and engineering
-4. Customer segmentation
-5. Churn prediction using supervised ML models
-6. KPI calculation and visualization
-7. Dashboard design and frontend integration
-
----
-
-## 🎨 Dashboard UI
-- Designed following a SaaS-style layout
-- Clean and minimal UI with KPI cards and charts
-- Structured for future backend and ML integration
-
-**Current Dashboard Features**
-- KPI Cards (Churn Rate, Retention Rate, Total Customers)
-- Churn & Retention Trend Line Chart
-- Customer Segmentation Doughnut Chart
-- Customer Input Panel (ready for backend integration)
-
----
-
-## 🧰 Tech Stack
-
-### Data & Machine Learning
-- Python
-- Pandas, NumPy
-- Scikit-learn
-
-### Backend (Planned)
-- Flask (REST API)
-
-### Frontend
+### 🔹 Frontend
 - HTML
 - CSS
 - JavaScript
 - Chart.js
 
-### Tools
-- Figma (UI/UX Design)
-- VS Code
-- Git & GitHub
+### 🔹 Backend
+- Flask (REST API)
+
+### 🔹 Machine Learning
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- Random Forest Classifier
+
+---
+
+## ⚙️ Functional Workflow
+
+1. Customer dataset is loaded and visualized using dynamic KPIs and charts
+2. User enters Customer ID in dashboard
+3. System auto-fills customer details from dataset
+4. Input is sent to trained ML model via Flask API
+5. Model predicts:
+   - Churn (Yes / No)
+   - Churn Probability
+6. Prediction result is displayed in dashboard
+
+---
+
+## 📈 Dashboard Features
+- KPI Cards (Churn Rate, Retention Rate, Total Customers)
+- Churn & Retention Trend Line Chart (Jan–Dec)
+- Customer Segmentation Doughnut Chart
+- Customer Input Panel
+- Auto-fill customer details from dataset
+- Real-time churn prediction using ML model
+- Risk probability visualization
 
 ---
 
 ## 📁 Project Structure
 customer-segmentation-retention/
 │
-├── assets/
-│ └── images/
-│ └── dashboard.png
+├── backend/
+│ ├── app.py
+│ ├── train_model.py
+│ ├── churn_model.pkl
+│ └── contract_encoder.pkl
 │
 ├── css/
 │ └── style.css
@@ -119,15 +117,16 @@ customer-segmentation-retention/
 │ └── customer_churn.csv
 │
 ├── index.html
-├── README.md
+└── README.md
 
 ---
 
 ## 🚀 Expected Business Impact
 - Early identification of customers at high churn risk
-- Improved customer retention through targeted strategies
-- Better decision-making using data-driven insights
-- Increased customer lifetime value (CLV)
+- Targeted retention strategies
+- Reduced customer attrition
+- Improved customer lifetime value (CLV)
+- Data-driven decision making
 
 ---
 
@@ -137,21 +136,24 @@ customer-segmentation-retention/
 - ✅ Dashboard UI completed
 - ✅ Dataset integrated with frontend
 - ✅ KPIs dynamically calculated
-- ⏳ Backend API development
-- ⏳ Machine learning model training
-- ⏳ Frontend–backend integration
+- ✅ ML Model trained
+- ✅ Flask API developed
+- ✅ Frontend–Backend integration completed
+- ⏳ Retention Recommendation Engine (Next Phase)
+- ⏳ Deployment
 
 ---
 
 ## 🔮 Future Enhancements
-- Real-time churn prediction
-- Backend-driven dynamic charts
-- Model explainability (feature importance)
+- Real-time retention recommendations
+- Revenue loss estimation
+- Model explainability (Feature Importance)
 - Role-based dashboards (Admin / Analyst)
+- Cloud deployment
 
 ---
 
 ## 👤 Author
 **Bandarupalli Kusuma**  
-B.E. Computer Science Engineering  
+B.E. Information Technology  
 Aspiring Data Scientist | Full Stack Developer | Cloud & AI Enthusiast
