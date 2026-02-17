@@ -2,16 +2,21 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
+import os
 
 print("🚀 Starting Flask Backend...")
 
+# ===============================
 # CREATE FLASK APP
+# ===============================
 app = Flask(__name__)
 
-# ENABLE CORS (for Live Server frontend)
+# ENABLE CORS (for Netlify Frontend)
 CORS(app)
 
-# LOAD TRAINED MODEL + ENCODER
+# ===============================
+# LOAD MODEL + ENCODER
+# ===============================
 try:
     model = joblib.load("churn_model.pkl")
     encoder = joblib.load("contract_encoder.pkl")
@@ -21,25 +26,27 @@ except Exception as e:
 
 
 # ===============================
-# HEALTH CHECK
+# HEALTH CHECK ROUTE
 # ===============================
 @app.route("/")
 def home():
     return jsonify({
-        "message": "Churn Prediction API Running!"
+        "status": "Backend Running Successfully 🚀"
     })
 
 
 # ===============================
-# PREDICT CHURN
+# PREDICTION ROUTE
 # ===============================
 @app.route("/predict", methods=["POST"])
 def predict():
-
     try:
         data = request.get_json()
 
-        # GET INPUT FROM FRONTEND
+        if not data:
+            return jsonify({"error": "No input data received"}), 400
+
+        # INPUT FROM FRONTEND
         tenure = float(data.get("tenure", 0))
         monthly = float(data.get("monthlyCharges", 0))
         contract = data.get("contract", "Month-to-Month")
@@ -47,7 +54,7 @@ def predict():
         # ENCODE CONTRACT TYPE
         contract_encoded = encoder.transform([contract])[0]
 
-        # PREPARE MODEL INPUT
+        # MODEL INPUT
         input_data = np.array([[tenure, monthly, contract_encoded]])
 
         # PREDICT
@@ -64,7 +71,8 @@ def predict():
 
 
 # ===============================
-# RUN SERVER
+# RENDER DEPLOYMENT RUN
 # ===============================
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
